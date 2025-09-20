@@ -3,10 +3,10 @@ from mysql.connector import Error
 
 def get_connection():
     return mysql.connector.connect(
-        host='your_host',
-        user='your_user',
-        password='your_password',
-        database='bank_db'
+        host='localhost',
+        user='root',
+        password='qwertyuiop',
+        database='bankmanagementsystem'
     )
 
 def setup_database():
