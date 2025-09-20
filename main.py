@@ -23,18 +23,27 @@ def main():
             bank.create_account(name, email, phone, password)
 
         elif choice == "2":
-            acc_id = int(input("Account ID: "))
-            amt = float(input("Amount: "))
-            bank.deposit(acc_id, amt)
+            try:
+                acc_id = int(input("Account ID: "))
+                amt = int(input("Amount: "))
+                bank.deposit(acc_id, amt)
+            except ValueError:
+                print("❌ Invalid input. Please enter whole numbers only.")
 
         elif choice == "3":
-            acc_id = int(input("Account ID: "))
-            amt = float(input("Amount: "))
-            bank.withdraw(acc_id, amt)
+            try:
+                acc_id = int(input("Account ID: "))
+                amt = int(input("Amount: "))
+                bank.withdraw(acc_id, amt)
+            except ValueError:
+                print("❌ Invalid input. Please enter whole numbers only.")
 
         elif choice == "4":
-            acc_id = int(input("Account ID: "))
-            bank.check_balance(acc_id)
+            try:
+                acc_id = int(input("Account ID: "))
+                bank.check_balance(acc_id)
+            except ValueError:
+                print("❌ Invalid Account ID.")
 
         elif choice == "5":
             print("👋 Goodbye!")

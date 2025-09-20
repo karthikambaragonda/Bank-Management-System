@@ -1,15 +1,17 @@
-import mysql.connector
-from mysql.connector import Error
+import pymysql
 
 def get_connection():
-    return mysql.connector.connect(
+    return pymysql.connect(
         host='localhost',
         user='root',
         password='qwertyuiop',
-        database='bankmanagementsystem'
+        database='bankmanagementsystem',
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor
     )
 
 def setup_database():
+    conn = None
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -21,7 +23,7 @@ def setup_database():
                 email VARCHAR(255) UNIQUE NOT NULL,
                 phone VARCHAR(20),
                 password VARCHAR(255) NOT NULL,
-                balance DECIMAL(10, 2) DEFAULT 0.00
+                balance INT DEFAULT 0
             )
         ''')
 
@@ -30,7 +32,7 @@ def setup_database():
                 transaction_id INT AUTO_INCREMENT PRIMARY KEY,
                 account_id INT,
                 type VARCHAR(50),
-                amount DECIMAL(10, 2),
+                amount INT,
                 date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (account_id) REFERENCES customers(account_id)
             )
@@ -38,11 +40,10 @@ def setup_database():
 
         conn.commit()
 
-    except Error as e:
-        print(f"Error: {e}")
+    except Exception as e:
+        print(f"❌ Database setup error: {e}")
+
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
             conn.close()
-
-setup_database()
