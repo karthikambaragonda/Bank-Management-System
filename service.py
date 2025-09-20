@@ -12,10 +12,10 @@ class BankService:
             """, (name, email, phone, password))
 
             conn.commit()
-            cursor.execute("select account_id from customers where email = %s",(email))
+            cursor.execute("select account_id from customers where email = %s", (email,))
             id = cursor.fetchone()
             print("✅ Account created successfully.")
-            print(f"You Account id is{id['account_id']}")
+            print(f"Your Account id is {id['account_id']}")
 
         except Exception as e:
             if 'Duplicate entry' in str(e):
@@ -27,9 +27,34 @@ class BankService:
                 cursor.close()
                 conn.close()
 
-    def deposit(self, account_id, amount):
+    def verify_password(self, account_id, password):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT password FROM customers WHERE account_id = %s", (account_id,))
+            result = cursor.fetchone()
+
+            if result and result['password'] == password:
+                return True
+            else:
+                print("❌ Incorrect password.")
+                return False
+
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            return False
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+
+    def deposit(self, account_id, amount, password):
         if amount <= 0:
             print("❌ Amount must be greater than zero.")
+            return
+
+        if not self.verify_password(account_id, password):
             return
 
         try:
@@ -59,9 +84,12 @@ class BankService:
                 cursor.close()
                 conn.close()
 
-    def withdraw(self, account_id, amount):
+    def withdraw(self, account_id, amount, password):
         if amount <= 0:
             print("❌ Amount must be greater than zero.")
+            return
+
+        if not self.verify_password(account_id, password):
             return
 
         try:
@@ -96,7 +124,10 @@ class BankService:
                 cursor.close()
                 conn.close()
 
-    def check_balance(self, account_id):
+    def check_balance(self, account_id, password):
+        if not self.verify_password(account_id, password):
+            return
+
         try:
             conn = get_connection()
             cursor = conn.cursor()

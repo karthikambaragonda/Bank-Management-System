@@ -26,7 +26,8 @@ def main():
             try:
                 acc_id = int(input("Account ID: "))
                 amt = int(input("Amount: "))
-                bank.deposit(acc_id, amt)
+                password = input("Password: ")
+                bank.deposit(acc_id, amt, password)
             except ValueError:
                 print("❌ Invalid input. Please enter whole numbers only.")
 
@@ -34,14 +35,16 @@ def main():
             try:
                 acc_id = int(input("Account ID: "))
                 amt = int(input("Amount: "))
-                bank.withdraw(acc_id, amt)
+                password = input("Password: ")
+                bank.withdraw(acc_id, amt, password)
             except ValueError:
                 print("❌ Invalid input. Please enter whole numbers only.")
 
         elif choice == "4":
             try:
                 acc_id = int(input("Account ID: "))
-                bank.check_balance(acc_id)
+                password = input("Password: ")
+                bank.check_balance(acc_id, password)
             except ValueError:
                 print("❌ Invalid Account ID.")
 
